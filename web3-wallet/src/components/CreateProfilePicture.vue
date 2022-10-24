@@ -82,7 +82,8 @@ export default {
 
 <style scoped>
 .image-container {
-  width: calc(100vw - 300px);
+  display: flex;
+  flex-wrap: wrap;
   height: auto;
   gap: 3rem;
   display: flex;
@@ -91,6 +92,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    flex-wrap: wrap;
 }
 .color-preview {
   height: 3rem;
@@ -116,8 +118,9 @@ export default {
     width: 4.5rem;
 }
 .cropped {
-  width: 8.56cm;
-  height: 5.398cm;
+  max-width: 8.56cm;
+  max-height: calc(100vw - 50px);
+  aspect-ratio: 8.56 /5.398;
   border: 1px solid grey;
 }
 button{

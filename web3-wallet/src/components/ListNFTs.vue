@@ -27,8 +27,8 @@ export default {
         this.invalidNft = []
 
       // Print owner's wallet address:
-    //  const ownerAddr = "0xa2CBCC5Bf9731b67E96Fa48B46B2Dc2740f517FE";
-    const ownerAddr = this.account;
+      const ownerAddr = "0xa2CBCC5Bf9731b67E96Fa48B46B2Dc2740f517FE";
+    //const ownerAddr = this.account;
 
       console.log("fetching NFTs for address:", ownerAddr);
       
@@ -203,7 +203,6 @@ margin: 2rem;
 
 .list-item {
   border: 1px solid black;
-  max-width: calc(100vw / 4);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -227,5 +226,11 @@ button {
 span::after {
   content: "\A";
   white-space: pre;
+}
+
+@media (min-width: 600px) {
+    .list-item {
+       max-width: calc(100vw / 4);
+    }
 }
 </style>

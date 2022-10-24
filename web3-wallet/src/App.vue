@@ -1,5 +1,6 @@
 <template>
-  <div class="nav">
+  <main>
+    <div class="nav">
     <button @click="admin = !admin">Admin Section</button>
     <Wallet v-model:account="account"/>
   </div>
@@ -11,6 +12,8 @@
     <ListNFTs v-model:picture="picture" v-model:showCropping="showCropping" :account="account" v-if="!showCropping" />
   <CreateProfilePicture :backgroundImage="picture" v-model:showCropping="showCropping" v-else/>
   </div>
+  </main>
+  
  
 </template>
 
@@ -51,7 +54,10 @@ export default {
 }
 .nav{
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 button{
