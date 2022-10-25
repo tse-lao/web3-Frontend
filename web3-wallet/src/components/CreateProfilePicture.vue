@@ -1,9 +1,18 @@
 <template>
   <main>
-    <div @click="$emit('update:showCropping', false)">Go Back</div>
+    <div>
+      <div @click="$emit('update:showCropping', false)" class="header">
+        <button>
+          <img src="../assets/icons/reset.png" class="icon" />
+         Go Back
+        </button>
+      
+      </div>
+    </div>
     <div class="image-container">
       <div class="cropper">
-        <vue-cropper
+        <div class="image-cropper">
+          <vue-cropper
           ref="cropper"
           id="cropper"
           :aspect-ratio="ratio"
@@ -11,23 +20,34 @@
           preview=".preview"
           :scalable="false"
           :highlight="false"
-          :rotate="90"
-          :background="backgroundColor"
+          :modal=false
+          :background=false
+          :containerStyle="'background:'+ backgroundColor+';  &-modal{background-color: none; opacity:none}'"
         />
-
+        </div>
         <div class="options">
           <div class="options">
             <div @click="eyeDropper" class="color-preview"></div>
             <input v-model="backgroundColor" />
           </div>
-          <button @click="changeRatio">Rotate</button>
-          <button @click="cropImage">Crop Image</button>
+          <button @click="rotateImage">
+            <img class="icon" src="../assets/icons/rotate.png" alt="rotate" />
+          </button>
+          <button @click="resetSettings">
+            <img class="icon" src="../assets/icons/reset.png" alt="rotate" />
+          </button>
+          <button @click="changeRatio">
+              <img v-if="horizontal" src="../assets/icons/vertical.png" class="icon"  alt="horizontal" />
+              <img v-else src="../assets/icons/horizontal.png" class="icon"  alt="vertical" />
+          </button>
+          <button @click="cropImage">
+            <img src="../assets/icons/edit-tools.png" class="icon" alt="create" />
+          </button>
         </div>
       </div>
 
-      <div v-if="cropped">
+      <div v-if="cropped" class="preview">
         <img class="cropped" :src="cropImg" />
-
         <button @click="uploadImage">Upload to IPFS</button>
       </div>
     </div>
@@ -53,17 +73,9 @@ export default {
       cropped: false,
       ratio: 8.56 / 5.398,
       rotate: 45,
-      backgroundColor: "transparent",
-      data: {
-        imgSrc:
-          "https://res.cloudinary.com/alchemyapi/image/upload/mainnet/32e76bd2af54947b98f96987261b912d.png",
-        cropImg: "",
-        cropped: false,
-        data: null,
-        ratio: 8.56 / 5.398,
-        rotate: 45,
-        backgroundColor: "transparent",
-      },
+      background: false,
+      backgroundColor: "#F2F2F2",
+      horizontal: true, 
     };
   },
   methods: {
@@ -75,30 +87,32 @@ export default {
     },
 
     changeRatio() {
-      if (this.ratio === 8.56 / 5.398) {
-        console.log("this ratio is the same;");
-        this.ratio = 5.398 / 8.56;
+      console.log("clicked")
+      if (this.horizontal) {
+        console.log("clicked horizontal")
+          this.ratio = 5.398 / 8.56;
+          this.horizontal = false;
+          this.$refs.cropper.setAspectRatio(this.ratio)
 
-        //we cahnge the settings of everything
-
-        this.data.backgroundColor = this.backgroundColor;
-        this.data.ratio = this.ratio;
-
-        this.$refs.cropper.setData({ "aspect-ratio": this.ratio });
-
-        this.$refs.cropper.rotate(45);
-
-        console.log(this.ratio);
       } else {
         this.ratio = 8.56 / 5.398;
-        console.log(this.ratio);
+        this.horizontal = true;
+        this.$refs.cropper.setAspectRatio(this.ratio)
       }
+    },
+    
+    resetSettings(){
+      this.$refs.cropper.reset();
+    },
+    
+    rotateImage(){
+      this.$refs.cropper.rotate(45)
     },
 
     async eyeDropper() {
       //check if eyedropper is support3ed
       if (!window.EyeDropper) {
-        console.alert("eyedropper is not suppoerted try, Chrome");
+        console.alert("eyedropper is not supported try, Chrome");
       }
 
       let eyeDropper = new window.EyeDropper();
@@ -137,18 +151,25 @@ export default {
 </script>
 
 <style scoped>
+.header{
+  text-align:left;
+  margin-top: 2rem;
+  margin-left: 1rem;
+}
 .image-container {
   display: flex;
   flex-wrap: wrap;
   height: auto;
   gap: 3rem;
   display: flex;
+  align-content: center;
+  align-items: center;
 }
 .cropper {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
   padding: 12px;
+  align-content: center;
   flex-wrap: wrap;
 }
 .color-preview {
@@ -156,6 +177,7 @@ export default {
   width: 3rem;
   border: 1px solid grey;
   border-radius: 8px;
+  margin: 2rem;
   background-color: v-bind("backgroundColor");
 }
 .color-preview:hover {
@@ -175,9 +197,18 @@ export default {
 }
 .cropped {
   max-width: 8.56cm;
-  max-height: calc(100vw - 50px);
-  aspect-ratio: 8.56 /5.398;
+  aspect-ratio: v-bind(ratio);
   border: 1px solid grey;
+  align-content: center;
+}
+.icon{
+  height: 1rem;
+  width: 1rem;
+}
+.preview{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   align-content: center;
 }
 button {

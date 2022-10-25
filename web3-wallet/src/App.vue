@@ -54,7 +54,7 @@ export default {
 }
 .nav{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
