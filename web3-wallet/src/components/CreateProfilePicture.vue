@@ -29,7 +29,8 @@
             :containerStyle="
               'background:' +
               backgroundColor +
-              ';  &-modal{background-color: none; opacity:none}'
+              ';  &-modal{background-color: none; opacity:none; border: 1px solid #000;}' +
+              'border: 1px solid #000'
             "
           />
         </div>
@@ -56,9 +57,12 @@
 
       <div v-if="cropped" class="preview">
         <img class="cropped" :src="cropImg" />
-        <button @click="uploadImage">Upload to IPFS</button>
 
-        <canvas></canvas>
+          <span class="company-name">UNBANKD</span>
+          <img src="../assets/chip.png" class='chip'/>
+          <span class="account-number">000 0000 000  000</span>
+          <span class="bank-account-name">C.S. Backname</span>
+        <button @click="uploadImage">Upload to IPFS</button>
       </div>
     </div>
   </main>
@@ -301,6 +305,7 @@ export default {
   flex-direction: column;
   gap: 2rem;
   align-content: center;
+  position: relative;
 }
 button {
   padding: 0.5rem 0.5rem;
@@ -309,5 +314,54 @@ button {
   border: none;
   font-size: 16px;
   font-weight: 400;
+}
+
+ .company-name{
+  position:absolute;
+  right: 10px;
+  top: 14px;
+  font-weight: 800;
+}
+
+.chip{
+  position:absolute;
+  max-height: 84px;
+  left: 25px;
+  top: 50px;
+}
+.account-number{
+  position:absolute;
+  top: 140px;
+  left: 25px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  text-shadow: 2px 7px 5px rgba(0,0,0,0.3), 
+    0px -4px 10px rgba(255,255,255,0.3);
+font-style: normal;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+
+color: black;
+
+
+  
+}
+.bank-account-name{
+  position:absolute;
+  top: 160px;
+  left: 25px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-shadow: 2px 7px 5px rgba(0,0,0,0.3), 
+    0px -4px 10px rgba(255,255,255,0.3);
+  font-style: normal;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+color: black;
 }
 </style>
