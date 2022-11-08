@@ -27,8 +27,8 @@ export default {
         this.invalidNft = []
 
       // Print owner's wallet address:
-      const ownerAddr = "0x0dbfb8e5d9e25cb9fda369c3662a0b94919b172e";
-    //const ownerAddr = this.account;
+      // const ownerAddr = "0x0dbfb8e5d9e25cb9fda369c3662a0b94919b172e";
+      const ownerAddr = this.account;
 
       console.log("fetching NFTs for address:", ownerAddr);
       
@@ -52,8 +52,6 @@ export default {
         response.contract.address, 
         response.rawMetadata.attributes
       );
-      
-      console.log(result)
 
       if (status) {
         this.nfts.push({
@@ -62,10 +60,10 @@ export default {
           media: response.media[0],
         });
       } else {
-        this.nfts.push({
+        this.invalidNft.push({
           contract: response.contract,
-          metaData: response.rawMetadata,
-          media: response.media[0],
+          result: result,
+          status: -100,
         });
       }
     },
@@ -170,6 +168,7 @@ main{
   gap: 2rem;
   flex-wrap: wrap;
   margin: 2rem;
+  justify-content: center;
 }
 .options{
     display: flex;
@@ -209,6 +208,7 @@ margin: 2rem;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+  min-width: 200px;
 }
 
 .list-item img {

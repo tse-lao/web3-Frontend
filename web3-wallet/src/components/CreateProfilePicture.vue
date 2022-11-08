@@ -2,14 +2,12 @@
   <main>
     <div>
       <div @click="$emit('update:showCropping', false)" class="header">
-        <button>
-          <img src="../assets/icons/reset.png" class="icon" />
-          Go Back
-        </button>
+          &#8592; Go Back
       </div>
     </div>
     <div class="image-container" v-if="!loading">
       <div class="cropper">
+        <h1>Create Card Design</h1>
         <div class="image-cropper" @click="changeMovable">
           <vue-cropper
             ref="cropper"
@@ -30,7 +28,8 @@
               'background:' +
               backgroundColor +
               ';  &-modal{background-color: none; opacity:none; border: 1px solid #000;}' +
-              'border: 1px solid #000'
+              'border: 1px solid #000' + 
+              '.cropper-view-box {border-radius: 16px !important;outline-color: black;}'
             "
           />
         </div>
@@ -41,9 +40,11 @@
           </div>
           <button @click="rotateImage">
             <img class="icon" src="../assets/icons/rotate.png" alt="rotate" />
+            Rotate
           </button>
           <button @click="resetSettings">
             <img class="icon" src="../assets/icons/reset.png" alt="rotate" />
+            Reset
           </button>
           <button @click="cropImage">
             <img
@@ -51,18 +52,18 @@
               class="icon"
               alt="create"
             />
+            Create
           </button>
         </div>
       </div>
-
+  
       <div v-if="cropped" class="preview">
         <img class="cropped" :src="cropImg" />
 
-          <span class="company-name">UNBANKD</span>
-          <img src="../assets/chip.png" class='chip'/>
-          <span class="account-number">000 0000 000  000</span>
-          <span class="bank-account-name">C.S. Backname</span>
-        <button @click="uploadImage">Upload to IPFS</button>
+        <span class="company-name">UNBANKD</span>
+        <img src="../assets/chip.png" class="chip" />
+        <span class="account-number">000 0000 000 000</span>
+        <span class="bank-account-name">C.S. Backname</span>
       </div>
     </div>
   </main>
@@ -98,30 +99,38 @@ export default {
       this.cropImg = this.$refs.cropper
         .getCroppedCanvas({ fillColor: this.backgroundColor, height: "204px" })
         .toDataURL();
+
       this.cropped = true;
+      window.scrollTo(1000, 10000);
     },
-    getFirstPixel(){
-      var canvas = document.createElement('canvas');
+    getFirstPixel() {
+      var canvas = document.createElement("canvas");
       var imgEl = new Image();
       imgEl.src = this.backgroundImage;
       imgEl.crossOrigin = "anonymous";
-      
+
       imgEl.onload = () => {
         canvas.width = 1;
         canvas.height = 1;
-        canvas.getContext('2d').drawImage(imgEl, 0, 0);
-        
-        var firstPixel = canvas.getContext('2d').getImageData(0,0,1,1).data;
-        
+        canvas.getContext("2d").drawImage(imgEl, 0, 0);
+
+        var firstPixel = canvas.getContext("2d").getImageData(0, 0, 1, 1).data;
+
         console.log(firstPixel);
-        
-        const hex = "#" + (1 << 24 | firstPixel[0] << 16 | firstPixel[1] << 8 | firstPixel[2]).toString(16).slice(1);
+
+        const hex =
+          "#" +
+          (
+            (1 << 24) |
+            (firstPixel[0] << 16) |
+            (firstPixel[1] << 8) |
+            firstPixel[2]
+          )
+            .toString(16)
+            .slice(1);
         this.backgroundColor = hex;
         this.loading = false;
-      }
-      
-      
-      
+      };
     },
     getAverageRGB() {
       var imgEl = new Image();
@@ -144,7 +153,7 @@ export default {
         return defaultRGB;
       }
 
-      imgEl.onload = () =>{
+      imgEl.onload = () => {
         height = canvas.height =
           imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
         width = canvas.width =
@@ -173,13 +182,16 @@ export default {
         rgb.g = ~~(rgb.g / count);
         rgb.b = ~~(rgb.b / count);
 
-        const hex = "#" + (1 << 24 | rgb.r << 16 | rgb.g << 8 | rgb.b).toString(16).slice(1);
-        
+        const hex =
+          "#" +
+          ((1 << 24) | (rgb.r << 16) | (rgb.g << 8) | rgb.b)
+            .toString(16)
+            .slice(1);
+
         console.log(hex);
         this.backgroundColor = hex;
-        this.loading = false
+        this.loading = false;
       };
-
     },
 
     resetSettings() {
@@ -188,9 +200,11 @@ export default {
 
     rotateImage() {
       this.$refs.cropper.rotate(45);
+      this.cropImage();
     },
     changeMovable() {
       this.$refs.cropper.setDragMode("move");
+      this.cropImage();
     },
     previewUpdate() {
       this.cropImage();
@@ -245,6 +259,10 @@ export default {
   margin-top: 2rem;
   margin-left: 1rem;
 }
+.header:hover{
+  cursor: pointer;
+  font-weight: 700;
+}
 .image-container {
   display: flex;
   flex-wrap: wrap;
@@ -253,6 +271,7 @@ export default {
   display: flex;
   align-content: center;
   align-items: center;
+  justify-content: center;
 }
 .cropper {
   display: flex;
@@ -273,14 +292,14 @@ export default {
 }
 .color-preview:hover {
   cursor: crosshair;
-   opacity: 0.5;
+  opacity: 0.5;
 }
 .options {
   display: flex;
   align-content: center;
   gap: 1rem;
   align-items: center;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 .options input {
   border: none;
@@ -289,12 +308,24 @@ export default {
   border-radius: 6px;
   width: 4.5rem;
 }
+.options button{
+  display:flex;
+  font-size: 10px;
+  text-transform: uppercase;
+  align-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
 .cropped {
   max-width: 85.6mm;
   aspect-ratio: v-bind(ratio);
   border: 1px solid grey;
   align-content: center;
   border-radius: 8px;
+}
+.cropper-view-box {
+  border-radius: 16px !important;
+  outline-color: black;
 }
 .icon {
   height: 1rem;
@@ -316,52 +347,49 @@ button {
   font-weight: 400;
 }
 
- .company-name{
-  position:absolute;
+.company-name {
+  position: absolute;
   right: 10px;
   top: 14px;
   font-weight: 800;
 }
 
-.chip{
-  position:absolute;
+.chip {
+  position: absolute;
   max-height: 84px;
   left: 25px;
   top: 50px;
 }
-.account-number{
-  position:absolute;
+.account-number {
+  position: absolute;
   top: 140px;
   left: 25px;
   font-size: 20px;
   font-weight: 900;
   letter-spacing: 5px;
-  text-shadow: 2px 7px 5px rgba(0,0,0,0.3), 
-    0px -4px 10px rgba(255,255,255,0.3);
-font-style: normal;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-
-color: black;
-
-
-  
-}
-.bank-account-name{
-  position:absolute;
-  top: 160px;
-  left: 25px;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 5px;
-  text-shadow: 2px 7px 5px rgba(0,0,0,0.3), 
-    0px -4px 10px rgba(255,255,255,0.3);
+  text-shadow: 2px 7px 5px rgba(0, 0, 0, 0.3),
+    0px -4px 10px rgba(255, 255, 255, 0.3);
   font-style: normal;
   font-size: 16px;
   line-height: 24px;
   /* identical to box height, or 150% */
 
-color: black;
+  color: black;
+}
+.bank-account-name {
+  position: absolute;
+  top: 160px;
+  left: 25px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-shadow: 2px 7px 5px rgba(0, 0, 0, 0.3),
+    0px -4px 10px rgba(255, 255, 255, 0.3);
+  font-style: normal;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+
+  color: black;
 }
 </style>

@@ -9,7 +9,7 @@
         ]
     }, 
     {
-        "contact": "0x95f36f45d93e5271612e4fd365fa9c2ac165a3fc", 
+        "contract": "0x95f36f45d93e5271612e4fd365fa9c2ac165a3fc", 
         "filter_traits": [{}]
     }
     
