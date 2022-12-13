@@ -1,0 +1,17 @@
+[
+    {
+        "contract": "0x9097466d10539c4b5f813241504858d30ea0106c",
+        "filter_traits": [
+            {
+                "trait_type": "Mouthpiece",
+                "value": "Shadowless vape"
+            }
+        ]
+    }, 
+    {
+        "contract": "0x95f36f45d93e5271612e4fd365fa9c2ac165a3fc", 
+        "filter_traits": [{}]
+    }
+    
+]
+
